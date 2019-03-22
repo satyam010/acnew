@@ -1,0 +1,47 @@
+{% extends 'base_student.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      {% if user.is_teacher %}
+      <li class="breadcrumb-item"><a href="{% url 'teachers:requests' %}">Requests</li>
+      {% endif %}
+      {% if user.is_student %}
+      <li class="breadcrumb-item"><a href="{% url 'students:requests' %}">Requests</li>
+      {% endif %}
+    </ol>
+  </nav>
+  <a href="{% url 'home' %}" class="btn btn-primary mb-3" role="button">Home</a>
+  {% if user.is_teacher %}
+  <a href="{% url 'teachers:homework_add' %}" class="btn btn-primary mb-3" role="button">Add Homework</a>
+  <a href="{% url 'teachers:notifications' %}" class="btn btn-primary mb-3" role="button">My Notifications</a>
+  <a href="{% url 'teachers:tests' %}" class="btn btn-primary mb-3" role="button">Award Marks</a>
+  <a href="{% url 'teachers:attendance-select' %}" class="btn btn-primary mb-3" role="button">Add Attendance</a>
+  <a href="{% url 'teachers:change_password' %}" class="btn btn-primary mb-3" role="button">Change Password</a>
+  <a href="{% url 'teachers:teacher_remark' %}" class="btn btn-primary mb-3" role="button">Remarks</a>
+  <a href="{% url 'teachers:requests' %}" class="btn btn-primary mb-3" role="button">Requests</a>
+  {% elif user.is_student %}
+  <a href="{% url 'students:notifications' %}" class="btn btn-primary mb-3" role="button">My Notifications</a>
+  <a href="{% url 'students:marks' %}" class="btn btn-primary mb-3" role="button">My Marks</a>
+  <a href="{% url 'students:attendance' %}" class="btn btn-primary mb-3" role="button">My Attendance</a>
+  <a href="{% url 'students:change_password' %}" class="btn btn-primary mb-3" role="button">Change Password</a>
+  <a href="{% url 'students:teacher_remark' %}" class="btn btn-primary mb-3" role="button">Remarks</a>
+  <a href="{% url 'students:requests' %}" class="btn btn-primary mb-3" role="button">Requests</a>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-6 col-sm-8 col-12">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }} 
+        <button type="submit" class="btn btn-success">Send Request</button>
+        {% if user.is_teacher %}
+        <a href="{% url 'teachers:requests' %}" class="btn btn-outline-secondary" role="button">Nevermind</a>
+        {% elif user.is_student %}
+        <a href="% url 'students:requests' %}" class="btn btn-outline-secondary" role="button">Nevermind</a>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+{% endblock %}
